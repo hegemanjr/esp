@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="esp.dev">
+    <serverData>
+      <paths name="esp.dev">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/httpdocs/Dev/esp" local="$PROJECT_DIR$" web="/dev/esp" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

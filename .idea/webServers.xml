@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="1b533e89-b3a0-46cc-a190-50e2c8288bec" name="esp.dev" url="http://jeffhegeman.com">
+        <fileTransfer host="jeffhegeman.com" port="21" password="dffedfc0dfeadf9cdf9adf92df9edf9bdf9ddf93df9ddf9adf9e" username="jhegeman2">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
