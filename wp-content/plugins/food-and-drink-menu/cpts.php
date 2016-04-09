@@ -99,6 +99,15 @@ class fdmCustomPostTypes {
 					'update_item' => __( 'Update Menu Section', FDM_TEXTDOMAIN ),
 					'add_new_item' => __( 'Add New Menu Section', FDM_TEXTDOMAIN ),
 					'new_item_name' => __( 'Menu Section', FDM_TEXTDOMAIN ),
+					'no_terms' => __( 'No menu sections', FDM_TEXTDOMAIN ),
+					'items_list_navigation' => __( 'Menu sections list navigation', FDM_TEXTDOMAIN ),
+					'items_list' => __( 'Menu sections list', FDM_TEXTDOMAIN ),
+					'archives' => __( 'Menu Archives', FDM_TEXTDOMAIN ),
+					'insert_into_item' => __( 'Insert into menu', FDM_TEXTDOMAIN ),
+					'uploaded_to_this_item' => __( 'Uploaded to this menu', FDM_TEXTDOMAIN ),
+					'filter_items_list' => __( 'Filter menu list', FDM_TEXTDOMAIN ),
+					'item_list_navigation' => __( 'Menu list navigation', FDM_TEXTDOMAIN ),
+					'items_list' => __( 'Menu list', FDM_TEXTDOMAIN ),
 				)
 			)
 
@@ -131,7 +140,17 @@ class fdmCustomPostTypes {
 				'search_items' => __( 'Search Menu Items', FDM_TEXTDOMAIN ),
 				'not_found' => __( 'No Menu Item found', FDM_TEXTDOMAIN ),
 				'not_found_in_trash' => __( 'No Menu Item found in Trash', FDM_TEXTDOMAIN ),
-				'parent' => __( 'Parent Menu Item', FDM_TEXTDOMAIN )
+				'parent' => __( 'Parent Menu Item', FDM_TEXTDOMAIN ),
+				'featured_image' => __( 'Item Photo', FDM_TEXTDOMAIN ),
+				'set_featured_image' => __( 'Set item photo', FDM_TEXTDOMAIN ),
+				'remove_featured_image' => __( 'Remove item photo', FDM_TEXTDOMAIN ),
+				'use_featured_image' => __( 'Use as item photo', FDM_TEXTDOMAIN ),
+				'archives' => __( 'Menu Item Archives', FDM_TEXTDOMAIN ),
+				'insert_into_item' => __( 'Insert into menu item', FDM_TEXTDOMAIN ),
+				'uploaded_to_this_item' => __( 'Uploaded to this menu item', FDM_TEXTDOMAIN ),
+				'filter_items_list' => __( 'Filter menu items list', FDM_TEXTDOMAIN ),
+				'item_list_navigation' => __( 'Menu items list navigation', FDM_TEXTDOMAIN ),
+				'items_list' => __( 'Menu items list', FDM_TEXTDOMAIN ),
 			),
 			'menu_position' => 15,
 			'public' => true,
@@ -483,7 +502,7 @@ class fdmCustomPostTypes {
 		// Save the metadata
 		foreach ($meta_ids as $meta_id => $sanitize_callback) {
 			$cur = get_post_meta( $post_id, $meta_id, true );
-			$new = call_user_func( $sanitize_callback, $_POST[$meta_id] );
+			$new = isset( $_POST[$meta_id] ) ? call_user_func( $sanitize_callback, $_POST[$meta_id] ) : '';
 			if ( $new && $new != $cur ) {
 				update_post_meta( $post_id, $meta_id, $new );
 			} elseif ( $new == '' && $cur ) {
@@ -573,7 +592,7 @@ class fdmCustomPostTypes {
 		}
 
 		$screen = get_current_screen();
-		if ( $screen->post_type == 'fdm-menu-item' ) {
+		if ( is_object( $screen ) && $screen->post_type == 'fdm-menu-item' ) {
 
 			$terms = get_terms( 'fdm-menu-section' );
 
@@ -602,7 +621,7 @@ class fdmCustomPostTypes {
 		}
 
 		$screen = get_current_screen();
-		if ( $screen->post_type == FDM_MENUITEM_POST_TYPE && !empty( $_GET['section'] ) ) {
+		if ( is_object( $screen ) && $screen->post_type == FDM_MENUITEM_POST_TYPE && !empty( $_GET['section'] ) ) {
 			$section = (int) $_GET['section'];
 
 			// Get menu items not assigned to any section
@@ -668,20 +687,24 @@ class fdmCustomPostTypes {
 					<tr>
 						<td>
 					<?php foreach( $col1 as $id ) : ?>
+						<?php if ( isset( $terms[ $id ] ) ) : ?>
 							<p>
 								<a href="<?php echo admin_url( 'edit-tags.php?action=edit&taxonomy=fdm-menu-section&tag_ID=' . $id . '&post_type=fdm-menu-item' ); ?>">
 								<?php echo $terms[ $id ]; ?>
 								</a>
 							</p>
+						<?php endif; ?>
 					<?php endforeach; ?>
 						</td>
 						<td>
 					<?php foreach( $col2 as $id ) : ?>
+						<?php if ( isset( $terms[ $id ] ) ) : ?>
 							<p>
 								<a href="<?php echo admin_url( 'edit-tags.php?action=edit&taxonomy=fdm-menu-section&tag_ID=' . $id . '&post_type=fdm-menu-item' ); ?>">
 									<?php echo $terms[ $id ]; ?>
 								</a>
 							</p>
+						<?php endif; ?>
 					<?php endforeach; ?>
 						</td>
 					</tr>

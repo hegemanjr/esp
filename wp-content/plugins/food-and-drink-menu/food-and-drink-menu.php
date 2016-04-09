@@ -3,7 +3,7 @@
  * Plugin Name: Food and Drink Menu
  * Plugin URI: http://themeofthecrop.com
  * Description: Create a menu for restaurants, cafes, bars and eateries and display it in templates, posts, pages and widgets.
- * Version: 1.4.2
+ * Version: 1.4.3
  * Author: Nate Wright
  * Author URI: https://github.com/NateWr
  *
@@ -62,6 +62,11 @@ class fdmFoodAndDrinkMenu {
 
 		// Add links to plugin listing
 		add_filter('plugin_action_links', array( $this, 'plugin_action_links' ), 10, 2);
+
+		// Backwards compatibility for new taxonomy term splitting
+		// in 4.2
+		// https://make.wordpress.org/core/2015/02/16/taxonomy-term-splitting-in-4-2-a-developer-guide/
+		add_action( 'split_shared_term', array( $this, 'compat_split_shared_term' ), 10, 4 );
 	}
 
 	/**
@@ -214,8 +219,7 @@ class fdmFoodAndDrinkMenu {
 			// Don't override an existing orderby setting. This prevents other
 			// orderby options from breaking.
 			if ( !$query->get ( 'orderby' ) ) {
-				$query->set( 'orderby', 'menu_order' );
-				$query->set( 'order', 'ASC' );
+				$query->set( 'orderby', array( 'menu_order' => 'ASC', 'post_date' => 'DESC' ) );
 			}
 		}
 
@@ -230,7 +234,7 @@ class fdmFoodAndDrinkMenu {
 
 		if ( $plugin == FDM_PLUGIN_FNAME ) {
 
-			$links['help'] = '<a href="' . FDM_PLUGIN_URL . '/docs" title="' . __( 'View the help documentation for Food and Drink Menu', FDM_TEXTDOMAIN ) . '">' . __( 'Help', FDM_TEXTDOMAIN ) . '</a>';
+			$links['help'] = '<a href="http://doc.themeofthecrop.com/plugins/food-and-drink-menu?utm_source=Plugin&utm_medium=Plugin%Help&utm_campaign=Food%20and%20Drink%20Menu" title="' . __( 'View the help documentation for Food and Drink Menu', FDM_TEXTDOMAIN ) . '">' . __( 'Help', FDM_TEXTDOMAIN ) . '</a>';
 
 			if ( !defined( 'FDMP_VERSION' ) ) {
 				$links['upgrade'] = '<a href="' . FDM_UPGRADE_URL . '" title="' . __( 'Upgrade to Food and Drink Pro', FDM_TEXTDOMAIN ) . '">' . __( 'Upgrade', FDM_TEXTDOMAIN ) . '</a>';
@@ -241,6 +245,57 @@ class fdmFoodAndDrinkMenu {
 
 	}
 
+	/**
+	 * Update menu section term ids when shared terms are split
+	 *
+	 * Backwards compatibility for new taxonomy term splitting
+	 * introduced in 4.2. Shared terms in different taxonomies
+	 * were created in versions prior to 4.1 and will be
+	 * automatically split in 4.2, with their term ids being
+	 * updated. This function will update the term ids used to
+	 * link menu sections to menus.
+	 *
+	 * https://make.wordpress.org/core/2015/02/16/taxonomy-term-splitting-in-4-2-a-developer-guide/
+	 *
+	 * @since 1.4.3
+	 */
+	public function compat_split_shared_term( $old_term_id, $new_term_id, $term_taxonomy_id, $taxonomy ) {
+
+		if ( $taxonomy !== 'fdm-menu-section' ) {
+			return;
+		}
+
+		$posts = new WP_Query( array(
+			'post_type' => 'fdm-menu',
+			'posts_per_page'	=> 1000,
+		) );
+
+		$cols = array( 'one', 'two' );
+		while( $posts->have_posts() ) {
+			$posts->the_post();
+
+			foreach( $cols as $col ) {
+				$updated = false;
+				$menu_sections = get_post_meta( get_the_ID(), 'fdm_menu_column_' . $col, true );
+
+				if ( !empty( $menu_sections ) ) {
+					$term_ids = explode( ',', $menu_sections );
+					foreach( $term_ids as $key => $term_id ) {
+						if ( $term_id == $old_term_id ) {
+							$term_ids[ $key ] = $new_term_id;
+							$updated = true;
+						}
+					}
+				}
+
+				if ( $updated ) {
+					update_post_meta( get_the_ID(), 'fdm_menu_column_' . $col, join( ',', $term_ids ) );
+				}
+			}
+		}
+	}
+
 }
 
+global $fdm_controller;
 $fdm_controller = new fdmFoodAndDrinkMenu();

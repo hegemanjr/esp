@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="esp.dev">
+  <component name="PublishConfigData" serverName="esp.prod">
     <serverData>
       <paths name="esp.dev">
         <serverdata>
           <mappings>
             <mapping deploy="/httpdocs/Dev/esp" local="$PROJECT_DIR$" web="/dev/esp" />
           </mappings>
+        </serverdata>
+      </paths>
+      <paths name="esp.prod">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/web.config" />
+            <excludedPath path="/web.config" />
+          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>

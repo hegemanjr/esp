@@ -1,0 +1,5 @@
+.idea
+.idea/*
+.ftpquota
+wp-config.php
+default.htm
