@@ -13,7 +13,7 @@
       <webServer id="eb01df23-2548-4318-b18d-85482309cd09" name="esp.prod" url="http://eaglespringspub.com">
         <fileTransfer host="eaglespringspub.com" port="21" password="dfc9df92dfcddfd3dfd2dfe5dfecdfebdfe8dff3df9edfdd" username="siteadmin@eaglespringspub.com">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" />
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
           </advancedOptions>
           <option name="port" value="21" />
         </fileTransfer>
