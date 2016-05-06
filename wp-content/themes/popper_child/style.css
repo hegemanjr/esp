@@ -1,0 +1,41 @@
+/*
+Theme Name: Popper_Child
+Theme URI: http://jeffhegeman.com
+Author: Jeff Hegeman
+Author URI: http://jeffhegeman.com
+Description: My own modifications to the Popper theme
+Version: 0.0.2
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: popper_child
+Template: popper
+*/
+
+
+.fdm-section-header {
+	display: none;
+}
+
+div .fdm-menu-content {
+	display: none;
+}
+
+.fdm-menu-title {
+	border-bottom: solid ;
+}
+
+@media screen and (min-width: 63em) {
+	.site-main {
+		max-width: 63em;
+		margin: 1.8em auto;
+	}
+}
+
+.fdm-item {
+	margin-bottom: 1.25em;
+}
+
+
+.site-logo a {
+	background: transparent;
+}
