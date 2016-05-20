@@ -17,7 +17,7 @@ Template: popper
 }
 
 div .fdm-menu-content {
-	display: none;
+	/*display: none;*/
 }
 
 .fdm-menu-title {
