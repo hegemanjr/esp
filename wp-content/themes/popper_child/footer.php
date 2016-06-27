@@ -18,6 +18,10 @@
 			&copy; <?php echo date('Y'); ?>
 			<span class="sep"> | </span>
 			<a href="index.php">Eagle Springs Pub</a>
+			<span class="sep"> | </span>
+			W345 S10463 CR E Mukwonago, WI 53149
+			<span class="sep"> | </span> 
+			(262) 594-2337
 		</div><!-- .site-info -->
 	</footer><!-- #colophon -->
 </div><!-- #page -->
